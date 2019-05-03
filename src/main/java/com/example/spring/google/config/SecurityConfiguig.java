@@ -65,6 +65,10 @@ public class SecurityConfiguig
 				.redirectionEndpoint()
 				.and()
 
+				// アクセストークンエンドポイント
+				.tokenEndpoint()
+				.and()
+
 				// ユーザー情報エンドポイント
 				.userInfoEndpoint()
 				.and()
