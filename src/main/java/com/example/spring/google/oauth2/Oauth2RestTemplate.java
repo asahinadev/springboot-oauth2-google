@@ -1,6 +1,7 @@
 package com.example.spring.google.oauth2;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class Oauth2RestTemplate {
 		this.tokenService = tokenService;
 		restTemplate = new RestTemplate();
 		restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
+		restTemplate.setInterceptors(Arrays.asList(new Oauth2ClientHttpRequestInterceptor()));
 	}
 
 	public <E> E get(String url, Class<E> clazz) {
@@ -45,9 +47,6 @@ public class Oauth2RestTemplate {
 			Class<E> clazz) {
 
 		URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParams(parameters).build(uriVariables);
-
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(tokenService.getAccessToken());
@@ -74,9 +73,6 @@ public class Oauth2RestTemplate {
 			Class<E> clazz) {
 
 		URI uri = UriComponentsBuilder.fromHttpUrl(url).build(uriVariables);
-
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(tokenService.getAccessToken());
