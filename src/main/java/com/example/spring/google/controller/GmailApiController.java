@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.spring.google.dto.GmailProfile;
+import com.example.spring.google.dto.GmailStop;
 import com.example.spring.google.oauth2.Oauth2RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,19 @@ public class GmailApiController {
 		parames.put("userId", email);
 
 		return restTemplate.get(api + "/users/{userId}/profile", parames, GmailProfile.class);
+	}
+
+	@GetMapping("stop")
+	@ResponseBody
+	public GmailStop stop(@AuthenticationPrincipal OAuth2User user) {
+
+		String email = (String) user.getAttributes().get("email");
+		log.debug("profile => {}", email);
+
+		Map<String, Object> parames = new LinkedHashMap<>();
+		parames.put("userId", email);
+
+		return restTemplate.post(api + "/users/{userId}/stop", parames, GmailStop.class);
 	}
 
 }
