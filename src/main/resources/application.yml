@@ -20,9 +20,11 @@ spring:
             scope:
               - email
               - profile
+              - https://mail.google.com/
 
 logging:
   level:
     com.example: DEBUG
     org.springframework.web.client.RestTemplate: DEBUG 
+    org.springframework.security.oauth2: DEBUG
 
