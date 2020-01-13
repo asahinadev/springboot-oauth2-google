@@ -58,4 +58,33 @@ public class Oauth2RestTemplate {
 		return restTemplate.exchange(request, clazz).getBody();
 	}
 
+	public <E> E post(String url, Class<E> clazz) {
+		return post(url, Collections.emptyMap(), new LinkedMultiValueMap<>(0), clazz);
+	}
+
+	public <E> E post(String url, Map<String, Object> uriVariables, Class<E> clazz) {
+		return post(url, uriVariables, new LinkedMultiValueMap<>(0), clazz);
+	}
+
+	public <E> E post(String url, MultiValueMap<String, String> parameters, Class<E> clazz) {
+		return post(url, Collections.emptyMap(), parameters, clazz);
+	}
+
+	public <E> E post(String url, Map<String, Object> uriVariables, MultiValueMap<String, String> parameters,
+			Class<E> clazz) {
+
+		URI uri = UriComponentsBuilder.fromHttpUrl(url).build(uriVariables);
+
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(tokenService.getAccessToken());
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+		RequestEntity<?> request = new RequestEntity<>(parameters, headers, HttpMethod.POST, uri);
+
+		return restTemplate.exchange(request, clazz).getBody();
+	}
+
 }
