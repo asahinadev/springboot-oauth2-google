@@ -16,6 +16,10 @@ spring:
             scope:
             - profile
             - email            - https://mail.google.com/
+            
+  jackson:
+    default-property-inclusion: non-null
+    serialization:      indent-output: true
 
 logging:
   level:

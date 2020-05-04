@@ -10,14 +10,18 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class BeanConfig {
 
+	protected static final String GMAIL_API = "https://www.googleapis.com/gmail/v1/";
+
 	@Bean
-	public WebClient webClient(
+	public WebClient gmailClient(
 			ReactiveClientRegistrationRepository clientRegistrationRepo,
 			ServerOAuth2AuthorizedClientRepository authorizedClientRepo) {
 
 		ServerOAuth2AuthorizedClientExchangeFilterFunction filter;
 		filter = new ServerOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepo, authorizedClientRepo);
 
-		return WebClient.builder().filter(filter).build();
+		return WebClient.builder()
+				.baseUrl(GMAIL_API)
+				.filter(filter).build();
 	}
 }

@@ -11,24 +11,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.spring.google.dto.gmail.Profile;
+import com.example.spring.google.dto.gmail.Messages;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/gmail")
-public class GmailController
+public class GmailMessagesController
 		extends GmailBaseController {
 
-	@GetMapping("/profile")
-	public Mono<Profile> profile(
+	@GetMapping("/messages")
+	public Mono<Messages> messages(
 			@AuthenticationPrincipal Mono<OAuth2User> oauth2User,
 			@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client) {
 
 		Map<String, Object> pathValue = new HashMap<>();
 		pathValue.put("userId", "me");
 
-		return getMono(client, "users/{userId}/profile", pathValue, Profile.class);
+		return getMono(client, "users/{userId}/messages", pathValue, Messages.class);
 	}
 
 }
