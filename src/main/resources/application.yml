@@ -14,8 +14,8 @@ spring:
           google:
             provider:      "google"
             client-name:   "Google"
-            client-id:     "[env]"
-            client-secret: "[env]"
+            client-id:     "[env] SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID"
+            client-secret: "[env] SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET"
             redirect-uri:  "{baseUrl}/login/oauth2/code/{registrationId}"
             scope:
               - email
@@ -24,7 +24,6 @@ spring:
 
 logging:
   level:
+    root: INFO
     com.example: DEBUG
-    org.springframework.web.client.RestTemplate: DEBUG 
-    org.springframework.security.oauth2: DEBUG
 
