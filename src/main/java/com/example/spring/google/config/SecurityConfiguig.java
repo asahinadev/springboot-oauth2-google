@@ -10,7 +10,15 @@ public class SecurityConfiguig {
 
 	@Bean
 	public SecurityWebFilterChain configure(ServerHttpSecurity http) throws Exception {
-		return http.authorizeExchange().pathMatchers("/about").permitAll().anyExchange().authenticated().and()
-				.oauth2Login().and().build();
+		return http
+				.authorizeExchange()
+				.pathMatchers("/about").permitAll()
+				.anyExchange().authenticated()
+				.and()
+
+				.oauth2Login()
+				.and()
+
+				.build();
 	}
 }

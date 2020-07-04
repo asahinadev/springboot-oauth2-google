@@ -1,7 +1,4 @@
-package com.example.spring.google.controller;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.example.spring.google.controller.gmail;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -23,58 +20,49 @@ import com.example.spring.google.dto.gmail.Labels;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/gmail")
-public class GmailLabelsController
-		extends GmailBaseController {
+@RequestMapping("/gmail/labels")
+public class LabelsController extends BaseController<Labels> {
 
-	protected static final String LS_URL = "users/{userId}/labels";
-	protected static final String ID_URL = "users/{userId}/labels/{labelId}";
+	private static final String PATH = "users/{userId}/labels";
+	private static final String PATH_ID = "users/{userId}/labels/{labelId}";
 
-	@GetMapping("/labels")
-	public Mono<Labels> list(@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client) {
-		return getMono(client, LS_URL, pathValue(null), Labels.class);
+	public LabelsController() {
+		super(Labels.class);
 	}
 
-	@GetMapping("/labels/{labelId}")
-	public Mono<Label> get(@PathVariable("labelId") String labelId,
+	@GetMapping
+	public Mono<Labels> list(
 			@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client) {
-		return getMono(client, ID_URL, pathValue(labelId), Label.class);
+		return get(client, PATH, varsMe);
 	}
 
 	@PostMapping("/labels")
-	public Mono<Labels> create(@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client,
+	public Mono<Labels> create(
+			@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client,
 			@RequestBody Label body) {
-		return postMono(client, LS_URL, pathValue(null), body, Labels.class);
+		return post(client, PATH, varsMe, body);
 	}
 
-	@PutMapping("/labels/{labelId}")
+	@PutMapping("{labelId}")
 	public Mono<Labels> put(@PathVariable("labelId") String labelId,
 			@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client,
 			@RequestBody Label body) {
-		return putMono(client, ID_URL, pathValue(labelId), body, Labels.class);
+		return put(client, PATH_ID, label(labelId), body);
 	}
 
-	@PatchMapping("/labels/{labelId}")
+	@PatchMapping("{labelId}")
 	public Mono<Labels> patch(@PathVariable("labelId") String labelId,
 			@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client,
 			@RequestBody Label body) {
-		return patchMono(client, ID_URL, pathValue(labelId), body, Labels.class);
+		return patch(client, PATH_ID, label(labelId), body);
 	}
 
-	@DeleteMapping("/labels/{labelId}")
+	@DeleteMapping("{labelId}")
 	public Mono<Void> delete(
 			@PathVariable("labelId") String labelId,
 			@AuthenticationPrincipal Mono<OAuth2User> oauth2User,
 			@RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient client) {
-		return deleteMono(client, ID_URL, pathValue(labelId));
-	}
-
-	protected Map<String, Object> pathValue(String labelId) {
-		Map<String, Object> pathValue = new HashMap<>();
-		pathValue.put("userId", "me");
-		if (labelId != null)
-			pathValue.put("labelId", labelId);
-		return pathValue;
+		return delete(client, PATH_ID, label(labelId));
 	}
 
 }
