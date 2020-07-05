@@ -194,6 +194,10 @@ public class BaseController<T> {
 		return this.post(client, path, varsEmpty, body);
 	}
 
+	public Mono<T> post(OAuth2AuthorizedClient client, String path) {
+		return this.post(client, path, varsEmpty, null);
+	}
+
 	public Mono<T> patch(OAuth2AuthorizedClient client, String path, Map<String, Object> vars, Object body) {
 		return patchResponse(client, path, vars, body).bodyToMono(clazz);
 	}
